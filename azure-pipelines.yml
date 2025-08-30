@@ -34,6 +34,7 @@ jobs:
 - job: apply
   displayName: apply
   pool: Dev-Agent-pool
+  dependsOn: install_init_plan
   steps:
   - task: TerraformTask@5
     inputs:
