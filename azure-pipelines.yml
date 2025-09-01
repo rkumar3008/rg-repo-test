@@ -25,6 +25,7 @@ jobs:
       backendAzureRmStorageAccountName: 'rkbkdstg'
       backendAzureRmContainerName: 'rk-container'
       backendAzureRmKey: 'tatefile.tf'
+      commandOptions: '-reconfigure'
   - task: TerraformTask@5
     displayName: plan
     inputs:
@@ -52,12 +53,13 @@ jobs:
   #     backendAzureRmStorageAccountName: 'rkbkdstg'
   #     backendAzureRmContainerName: 'rk-container'
   #     backendAzureRmKey: 'tatefile.tf'
+
   - download: current     #pipeline id, current means artifect will download from current pipeline
     artifact:  job1plan
   - task: TerraformTask@5
     inputs:
       provider: 'azurerm'
       command: 'apply'
-      commandOptions: '-auto-approve'
+      commandOptions: '-auto-approve '
       environmentServiceNameAzureRM: 'identity-federation-spn'
   
