@@ -8,7 +8,7 @@ pool: Dev-Agent-pool
 jobs:
 - job: install_init_plan             #job1
   displayName: init_plan
-  pool: Dev-Agent-pool
+  # pool: Dev-Agent-pool
   steps:
   - task: TerraformInstaller@1
     displayName: terraform install
@@ -38,7 +38,7 @@ jobs:
 
 - job: apply                        #Job2 
   displayName: apply
-  pool: Dev-Agent-pool
+  # pool: Dev-Agent-pool
   dependsOn: install_init_plan
   steps:
   
