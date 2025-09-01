@@ -31,9 +31,9 @@ jobs:
       provider: 'azurerm'
       command: 'plan'
       environmentServiceNameAzureRM: 'identity-federation-spn'
-      commandOptions: '-out=tfplan'
+      commandOptions: '-out=rkplan.txt'
 
-  - publish: tfplan
+  - publish: rkplan.txt
     artifact: job1plan
 
 - job: apply                        #Job2 
@@ -59,6 +59,6 @@ jobs:
     inputs:
       provider: 'azurerm'
       command: 'apply'
-      commandOptions: '-auto-approve '
+      commandOptions: '-auto-approve job1plan'
       environmentServiceNameAzureRM: 'identity-federation-spn'
   
