@@ -6,7 +6,7 @@ trigger:
 pool: Dev-Agent-pool
 
 jobs:
-- job: install_init_plan
+- job: install_init_plan             #job1
   displayName: init_plan
   pool: Dev-Agent-pool
   steps:
@@ -31,23 +31,29 @@ jobs:
       provider: 'azurerm'
       command: 'plan'
       environmentServiceNameAzureRM: 'identity-federation-spn'
-- job: apply
+      commandOptions: '-out=rkplan'
+
+  - publish: rkplan
+    artifact: job1plan
+
+- job: apply                        #Job2 
   displayName: apply
   pool: Dev-Agent-pool
   dependsOn: install_init_plan
   steps:
   
-  - task: TerraformTask@5
-    displayName: init
-    inputs:
-      provider: 'azurerm'
-      command: 'init'
-      backendServiceArm: 'identity-federation-spn'
-      backendAzureRmResourceGroupName: 'Backend-rg'
-      backendAzureRmStorageAccountName: 'rkbkdstg'
-      backendAzureRmContainerName: 'rk-container'
-      backendAzureRmKey: 'tatefile.tf'
-      
+  # - task: TerraformTask@5           #we need to run init again in job2 beform apply
+  #   displayName: init
+  #   inputs:
+  #     provider: 'azurerm'
+  #     command: 'init'
+  #     backendServiceArm: 'identity-federation-spn'
+  #     backendAzureRmResourceGroupName: 'Backend-rg'
+  #     backendAzureRmStorageAccountName: 'rkbkdstg'
+  #     backendAzureRmContainerName: 'rk-container'
+  #     backendAzureRmKey: 'tatefile.tf'
+  - download: current     #pipeline id, current means artifect will download from current pipeline
+    artifact:  job1plan
   - task: TerraformTask@5
     inputs:
       provider: 'azurerm'
