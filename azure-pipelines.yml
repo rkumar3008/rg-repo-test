@@ -31,10 +31,10 @@ jobs:
       provider: 'azurerm'
       command: 'plan'
       environmentServiceNameAzureRM: 'identity-federation-spn'
-      commandOptions: '-out=rkplan.txt'
+  #     commandOptions: '-out=rkplan'
 
-  - publish: rkplan.txt
-    artifact: job1plan
+  # - publish: rkplan
+  #   artifact: job1plan
 
 - job: apply                        #Job2 
   displayName: apply
@@ -53,12 +53,12 @@ jobs:
       backendAzureRmContainerName: 'rk-container'
       backendAzureRmKey: 'tatefile.tf'
 
-  - download: current     #pipeline id, current means artifect will download from current pipeline
-    artifact:  job1plan
+  # - download: current     #pipeline id, current means artifect will download from current pipeline
+  #   artifact:  job1plan
   - task: TerraformTask@5
     inputs:
       provider: 'azurerm'
       command: 'apply'
-      commandOptions: '-auto-approve job1plan'
+      commandOptions: '-auto-approve'
       environmentServiceNameAzureRM: 'identity-federation-spn'
   
