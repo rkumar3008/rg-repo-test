@@ -36,6 +36,18 @@ jobs:
   pool: Dev-Agent-pool
   dependsOn: install_init_plan
   steps:
+  
+  - task: TerraformTask@5
+    displayName: init
+    inputs:
+      provider: 'azurerm'
+      command: 'init'
+      backendServiceArm: 'identity-federation-spn'
+      backendAzureRmResourceGroupName: 'Backend-rg'
+      backendAzureRmStorageAccountName: 'rkbkdstg'
+      backendAzureRmContainerName: 'rk-container'
+      backendAzureRmKey: 'tatefile.tf'
+      
   - task: TerraformTask@5
     inputs:
       provider: 'azurerm'
