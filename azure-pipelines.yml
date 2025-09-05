@@ -35,8 +35,19 @@ jobs:
 
   # - publish: rkplan
   #   artifact: job1plan
+- job: Manual_validation            #Job2
+  displayName: manual_validation
+  dependsOn: install_init_plan
+  pool: server
+  steps:
+  - task: ManualValidation@1
+    inputs:
+      notifyUsers: '2ranjeetkr@gmail.com'
+      approvers: '2ranjeetkr@gmail.com'
+      instructions: 'please check plane and approve.'
 
-- job: apply                        #Job2 
+
+- job: apply                        #Job3 
   displayName: apply
   # pool: Dev-Agent-pool
   dependsOn: install_init_plan
