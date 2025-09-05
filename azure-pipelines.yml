@@ -77,6 +77,7 @@ jobs:
   # - download: current     #pipeline id, current means artifect will download from current pipeline
   #   artifact:  job1plan
   - task: TerraformTask@5
+    displayName: Apply
     inputs:
       provider: 'azurerm'
       command: 'apply'
