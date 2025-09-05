@@ -52,8 +52,8 @@ jobs:
   steps:
   - task: ManualValidation@1
     inputs:
-      notifyUsers: '2ranjeetkr@gmail.com'
-      approvers: '2ranjeetkr@gmail.com'
+  # notifyUsers: '2ranjeetkr@gmail.com'
+  # approvers: '2ranjeetkr@gmail.com'
       instructions: 'please check plane and approve.'
 
 
