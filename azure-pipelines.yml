@@ -26,6 +26,7 @@ jobs:
   #     backendAzureRmContainerName: 'rk-container'
   #     backendAzureRmKey: 'tatefile.tf'
   - task: TerraformTask@5
+    displayName: init
     inputs:
       provider: 'azurerm'
       command: 'init'
