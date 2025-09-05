@@ -15,16 +15,25 @@ jobs:
     inputs:
       terraformVersion: 'latest'
 
+  # - task: TerraformTask@5
+  #   displayName: init
+  #   inputs:
+  #     provider: 'azurerm'
+  #     command: 'init'
+  #     backendServiceArm: 'identity-federation-spn'
+  #     backendAzureRmResourceGroupName: 'Backend-rg'
+  #     backendAzureRmStorageAccountName: 'rkbkdstg'
+  #     backendAzureRmContainerName: 'rk-container'
+  #     backendAzureRmKey: 'tatefile.tf'
   - task: TerraformTask@5
-    displayName: init
     inputs:
       provider: 'azurerm'
       command: 'init'
       backendServiceArm: 'identity-federation-spn'
-      backendAzureRmResourceGroupName: 'Backend-rg'
-      backendAzureRmStorageAccountName: 'rkbkdstg'
-      backendAzureRmContainerName: 'rk-container'
-      backendAzureRmKey: 'tatefile.tf'
+      backendAzureRmResourceGroupName: 'backend-rg'
+      backendAzureRmStorageAccountName: 'stgstate'
+      backendAzureRmContainerName: 'terraformstate'
+      backendAzureRmKey: 'state.tf'
   - task: TerraformTask@5
     displayName: plan
     inputs:
