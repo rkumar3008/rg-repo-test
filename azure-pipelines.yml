@@ -63,16 +63,16 @@ jobs:
   dependsOn: Manual_validation
   steps:
   
-  - task: TerraformTask@5           #we need to run init again in job2 beform apply
+  - task: TerraformTask@5
     displayName: init
     inputs:
       provider: 'azurerm'
       command: 'init'
       backendServiceArm: 'identity-federation-spn'
-      backendAzureRmResourceGroupName: 'Backend-rg'
-      backendAzureRmStorageAccountName: 'rkbkdstg'
-      backendAzureRmContainerName: 'rk-container'
-      backendAzureRmKey: 'tatefile.tf'
+      backendAzureRmResourceGroupName: 'backend-rg'
+      backendAzureRmStorageAccountName: 'stgstate'
+      backendAzureRmContainerName: 'terraformstate'
+      backendAzureRmKey: 'state.tf'
 
   # - download: current     #pipeline id, current means artifect will download from current pipeline
   #   artifact:  job1plan
