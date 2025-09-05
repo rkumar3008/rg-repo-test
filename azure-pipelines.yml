@@ -50,7 +50,7 @@ jobs:
 - job: apply                        #Job3 
   displayName: apply
   # pool: Dev-Agent-pool
-  dependsOn: install_init_plan
+  dependsOn: Manual_validation
   steps:
   
   - task: TerraformTask@5           #we need to run init again in job2 beform apply
