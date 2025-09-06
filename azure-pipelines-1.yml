@@ -1,0 +1,77 @@
+trigger:                                 #iska matlab hai ki pipeline tabhi trigger hoga jab code main ya kisi bhi feature/ branch me push hoga.*
+- main
+- feature/*
+
+pool: Dev-Agent-pool
+
+jobs:
+# --------------------------
+# Job1: Init + Plan (Feature branches only)
+# --------------------------
+- job: init_plan                        #job1
+  displayName: Init & Plan
+  condition: startsWith(variables['Build.SourceBranch'], 'refs/heads/feature/')       #startsWith=Job1 will trigger once code will push in feature/* i.e feature can be differen
+  steps:
+  - task: TerraformInstaller@1
+    displayName: Install Terraform
+    inputs:
+      terraformVersion: 'latest'
+
+  - task: TerraformTask@5
+    displayName: init
+    inputs:
+      provider: 'azurerm'
+      command: 'init'
+      backendServiceArm: 'identity-federation-spn'
+      backendAzureRmResourceGroupName: 'backend-rg'
+      backendAzureRmStorageAccountName: 'stgstate'
+      backendAzureRmContainerName: 'terraformstate'
+      backendAzureRmKey: 'state.tf'
+
+  - task: TerraformTask@5
+    displayName: Terraform Plan
+    inputs:
+      provider: 'azurerm'
+      command: 'plan'
+      environmentServiceNameAzureRM: 'identity-federation-spn'
+      commandOptions: '-out=tfplan'
+
+  - publish: tfplan
+    artifact: planArtifact
+
+
+# --------------------------
+# Job2: Init + Apply (Main branch only + Approval Gate)
+# --------------------------
+- job: init_apply
+  displayName: Init & Apply
+  dependsOn: init_plan
+  condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')             #eq=conpare the condition strictaly but startsWith=compare condition loosly
+  environment: dev-env                                                 # yaha pe approval lagega
+  steps:
+  - task: TerraformInstaller@1
+    displayName: Install Terraform
+    inputs:
+      terraformVersion: 'latest'
+
+  - task: TerraformTask@5
+    displayName: init
+    inputs:
+      provider: 'azurerm'
+      command: 'init'
+      backendServiceArm: 'identity-federation-spn'
+      backendAzureRmResourceGroupName: 'backend-rg'
+      backendAzureRmStorageAccountName: 'stgstate'
+      backendAzureRmContainerName: 'terraformstate'
+      backendAzureRmKey: 'state.tf'
+
+  - download: current
+    artifact: planArtifact
+
+  - task: TerraformTask@5
+    displayName: Terraform Apply
+    inputs:
+      provider: 'azurerm'
+      command: 'apply'
+      environmentServiceNameAzureRM: 'identity-federation-spn'
+      commandOptions: '-auto-approve tfplan'
