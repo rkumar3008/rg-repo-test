@@ -1,4 +1,4 @@
-trigger:                                 #iska matlab hai ki pipeline tabhi trigger hoga jab code main ya kisi bhi feature/ branch me push hoga.*
+trigger:                                 # iska matlab hai ki pipeline tabhi trigger hoga jab code main ya kisi bhi feature/* branch me push hoga
 - main
 - feature/*
 
@@ -8,36 +8,36 @@ jobs:
 # --------------------------
 # Job1: Init + Plan (Feature branches only)
 # --------------------------
-- job: init_plan                        #job1
+- job: init_plan
   displayName: Init & Plan
-  condition: startsWith(variables['Build.SourceBranch'], 'refs/heads/feature/')       #startsWith=Job1 will trigger once code will push in feature/* i.e feature can be differen
+  condition: startsWith(variables['Build.SourceBranch'], 'refs/heads/feature/')   # Job1 will run only when code is pushed in feature/*
   steps:
-  - task: TerraformInstaller@1
-    displayName: Install Terraform
-    inputs:
-      terraformVersion: 'latest'
+    - task: TerraformInstaller@1
+      displayName: Install Terraform
+      inputs:
+        terraformVersion: 'latest'
 
-  - task: TerraformTask@5
-    displayName: init
-    inputs:
-      provider: 'azurerm'
-      command: 'init'
-      backendServiceArm: 'identity-federation-spn'
-      backendAzureRmResourceGroupName: 'backend-rg'
-      backendAzureRmStorageAccountName: 'stgstate'
-      backendAzureRmContainerName: 'terraformstate'
-      backendAzureRmKey: 'state.tf'
+    - task: TerraformTask@5
+      displayName: Terraform Init
+      inputs:
+        provider: 'azurerm'
+        command: 'init'
+        backendServiceArm: 'identity-federation-spn'
+        backendAzureRmResourceGroupName: 'backend-rg'
+        backendAzureRmStorageAccountName: 'stgstate'
+        backendAzureRmContainerName: 'terraformstate'
+        backendAzureRmKey: 'state.tf'
 
-  - task: TerraformTask@5
-    displayName: Terraform Plan
-    inputs:
-      provider: 'azurerm'
-      command: 'plan'
-      environmentServiceNameAzureRM: 'identity-federation-spn'
-      commandOptions: '-out=tfplan'
+    - task: TerraformTask@5
+      displayName: Terraform Plan
+      inputs:
+        provider: 'azurerm'
+        command: 'plan'
+        environmentServiceNameAzureRM: 'identity-federation-spn'
+        commandOptions: '-out=tfplan'
 
-  - publish: tfplan
-    artifact: planArtifact
+    - publish: tfplan
+      artifact: planArtifact
 
 
 # --------------------------
@@ -46,32 +46,32 @@ jobs:
 - job: init_apply
   displayName: Init & Apply
   dependsOn: init_plan
-  condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')             #eq=conpare the condition strictaly but startsWith=compare condition loosly
-  environment: dev-env                                                 # yaha pe approval lagega
+  condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
+
   steps:
-  - task: TerraformInstaller@1
-    displayName: Install Terraform
-    inputs:
-      terraformVersion: 'latest'
+    - task: TerraformInstaller@1
+      displayName: Install Terraform
+      inputs:
+        terraformVersion: 'latest'
 
-  - task: TerraformTask@5
-    displayName: init
-    inputs:
-      provider: 'azurerm'
-      command: 'init'
-      backendServiceArm: 'identity-federation-spn'
-      backendAzureRmResourceGroupName: 'backend-rg'
-      backendAzureRmStorageAccountName: 'stgstate'
-      backendAzureRmContainerName: 'terraformstate'
-      backendAzureRmKey: 'state.tf'
+    - task: TerraformTask@5
+      displayName: Terraform Init
+      inputs:
+        provider: 'azurerm'
+        command: 'init'
+        backendServiceArm: 'identity-federation-spn'
+        backendAzureRmResourceGroupName: 'backend-rg'
+        backendAzureRmStorageAccountName: 'stgstate'
+        backendAzureRmContainerName: 'terraformstate'
+        backendAzureRmKey: 'state.tf'
 
-  - download: current
-    artifact: planArtifact
+    - download: current
+      artifact: planArtifact
 
-  - task: TerraformTask@5
-    displayName: Terraform Apply
-    inputs:
-      provider: 'azurerm'
-      command: 'apply'
-      environmentServiceNameAzureRM: 'identity-federation-spn'
-      commandOptions: '-auto-approve tfplan'
+    - task: TerraformTask@5
+      displayName: Terraform Apply
+      inputs:
+        provider: 'azurerm'
+        command: 'apply'
+        environmentServiceNameAzureRM: 'identity-federation-spn'
+        commandOptions: '-auto-approve tfplan'
