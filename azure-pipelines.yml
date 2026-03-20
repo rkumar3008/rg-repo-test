@@ -1,7 +1,7 @@
 trigger:
-  branches:
-    include:
-      - main
+- main
+
+pool: rk-self-hosted-pool
 
 steps:
 - task: TerraformInstaller@1
