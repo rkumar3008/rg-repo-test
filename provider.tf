@@ -1,9 +1,9 @@
 terraform {
   backend "azurerm" {
-    resource_group_name = "backend-rg"
-    storage_account_name = "stgstate"
-    container_name = "terraformstate"
-    key = "state.tf"
+    resource_group_name = "comman-rg"
+    storage_account_name = "commanstrg"
+    container_name = "testing"
+    key = "rk_state.tf"
   }
   required_providers {
     azurerm = {
