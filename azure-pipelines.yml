@@ -1,0 +1,20 @@
+trigger:
+  branches:
+    include:
+      - main
+
+steps:
+- task: TerraformInstaller@1
+  inputs:
+    terraformVersion: 'latest'
+
+- task: TerraformTask@5
+  inputs:
+    provider: 'azurerm'
+    command: 'init'
+    backendServiceArm: 'Managed-id-service-connection'
+    backendAzureRmOverrideSubscriptionID: 'f7c92316-e35c-46d7-8627-eb58c8587ec6'
+    backendAzureRmResourceGroupName: 'comman-rg'
+    backendAzureRmStorageAccountName: 'commanstrg'
+    backendAzureRmContainerName: 'testing'
+    backendAzureRmKey: 'rk_state.tf'
