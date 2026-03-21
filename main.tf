@@ -1,9 +1,4 @@
 resource "azurerm_resource_group" "rg1" {
-  name     = "rk-rg"
+  name     = "rk-rg12"
   location = "eastus"
-}
-resource "azurerm_resource_group" "rg2" {
-  name     = "rk-rg2"
-  location = "eastus"
-  
 }
