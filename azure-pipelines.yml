@@ -1,6 +1,5 @@
 trigger:
 - main
-- feature/*
 
 pool: rk-self-hosted-pool
 
