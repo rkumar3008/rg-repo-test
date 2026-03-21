@@ -5,4 +5,5 @@ resource "azurerm_resource_group" "rg1" {
 resource "azurerm_resource_group" "rg2" {
   name     = "rk-rg2"
   location = "eastus"
+  
 }
