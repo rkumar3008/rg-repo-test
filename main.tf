@@ -1,4 +1,4 @@
-resource "azurerm_resource_group" "rg1" {
+resource "azurerm_resource_group" "rkrg" {
   name     = "rk-rg12"
   location = "eastus"
 }
