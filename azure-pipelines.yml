@@ -55,10 +55,10 @@ trigger:
 pool: rk-self-hosted-pool
 
 jobs:
-  - job: terraform_install_inite
-    displayName: terraform_install_inite
+  - job: terraform
     steps:
     - task: TerraformInstaller@1
+      displayName: terraform_install
       inputs:
         terraformVersion: 'latest'
     
@@ -72,15 +72,18 @@ jobs:
         backendAzureRmStorageAccountName: 'sidharthstga'
         backendAzureRmContainerName: 'rk-container'
         backendAzureRmKey: 'rk_state.tf'
-  - job: terraform_plan
-    displayName: terraform_validate_plan
+
+  - job: terraform_validate
     steps:
     - task: TerraformTask@5
       displayName: validate
       inputs:
         provider: 'azurerm'
         command: 'validate'
+  - job: plan
+    steps:    
     - task: TerraformTask@5
+      displayName: validate
       inputs:
         provider: 'azurerm'
         command: 'plan'
@@ -96,7 +99,7 @@ jobs:
 
   - job: apply
     displayName: apply
-    dependsOn: terraform_plan
+    dependsOn: plan
     steps:
     - task: TerraformTask@5
       inputs:
