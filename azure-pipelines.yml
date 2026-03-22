@@ -16,11 +16,11 @@
 #   inputs:
 #     provider: 'azurerm'
 #     command: 'init'
-#     backendServiceArm: 'Managed-id-service-connection'
+#     backendServiceArm: 'Service-connection-Managed-id'
 #     backendAzureRmOverrideSubscriptionID: 'f7c92316-e35c-46d7-8627-eb58c8587ec6'
 #     backendAzureRmResourceGroupName: 'rk-rg'
-#     backendAzureRmStorageAccountName: 'commonstg1'
-#     backendAzureRmContainerName: 'statecontainer'
+#     backendAzureRmStorageAccountName: 'sidharthstga'
+#     backendAzureRmContainerName: 'rk-container'
 #     backendAzureRmKey: 'rk_state.tf'
 
 # - task: TerraformTask@5
@@ -34,7 +34,7 @@
 #   inputs:
 #     provider: 'azurerm'
 #     command: 'plan'
-#     environmentServiceNameAzureRM: 'Managed-id-service-connection'
+#     environmentServiceNameAzureRM: 'Service-connection-Managed-id'
 
 
 # - task: TerraformTask@5
@@ -42,7 +42,7 @@
 #     provider: 'azurerm'
 #     command: 'apply'
 #     commandOptions: '--auto-approve'
-#     environmentServiceNameAzureRM: 'Managed-id-service-connection'
+#     environmentServiceNameAzureRM: 'Service-connection-Managed-id'
 
 
 
@@ -51,6 +51,7 @@
 
 trigger:
 - main
+
 pool: rk-self-hosted-pool
 
 jobs:
@@ -66,10 +67,10 @@ jobs:
       inputs:
         provider: 'azurerm'
         command: 'init'
-        backendServiceArm: 'Managed-id-service-connection'
+        backendServiceArm: 'Service-connection-Managed-id'
         backendAzureRmResourceGroupName: 'rk-rg'
-        backendAzureRmStorageAccountName: 'commonstg1'
-        backendAzureRmContainerName: 'statecontainer'
+        backendAzureRmStorageAccountName: 'sidharthstga'
+        backendAzureRmContainerName: 'rk-container'
         backendAzureRmKey: 'rk_state.tf'
   - job: terraform_plan
     displayName: terraform_validate_plan
@@ -83,22 +84,23 @@ jobs:
       inputs:
         provider: 'azurerm'
         command: 'plan'
-        environmentServiceNameAzureRM: 'Managed-id-service-connection'
-  - job: namual_validation
-    displayName: manual_validation
-    pool: server
-    steps:
-    - task: ManualValidation@1
-      inputs:
-        notifyUsers: '2ranjeetkr@gmail.com'
-        approvers: '2ranjeetkr@gmail.com'
+        environmentServiceNameAzureRM: 'Service-connection-Managed-id'
+  # - job: namual_validation
+  #   displayName: manual_validation
+  #   pool: server
+  #   steps:
+  #   - task: ManualValidation@1
+  #     inputs:
+  #       notifyUsers: '2ranjeetkr@gmail.com'
+  #       approvers: '2ranjeetkr@gmail.com'
 
   - job: apply
     displayName: apply
+    dependsOn: terraform_plan
     steps:
     - task: TerraformTask@5
       inputs:
         provider: 'azurerm'
         command: 'apply'
         commandOptions: '--auto-approve'
-        environmentServiceNameAzureRM: 'Managed-id-service-connection'
+        environmentServiceNameAzureRM: 'Service-connection-Managed-id'
