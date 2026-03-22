@@ -80,10 +80,13 @@ jobs:
       inputs:
         provider: 'azurerm'
         command: 'validate'
+
+
   - job: plan
+    dependsOn: terraform_validate
     steps:    
     - task: TerraformTask@5
-      displayName: validate
+      displayName: plan
       inputs:
         provider: 'azurerm'
         command: 'plan'
