@@ -1,6 +1,6 @@
 terraform {
   backend "azurerm" {
-    resource_group_name = "rk-rg"
+    resource_group_name = "sidharthkumar-rg"
     storage_account_name = "sidharthstga"
     container_name = "rk-container"
     key = "rk_state.tf"
@@ -8,7 +8,7 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "4.41.0"
+      version = "4.65.0"
     }
   }
 }
