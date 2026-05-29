@@ -1,0 +1,64 @@
+trigger:
+- main
+# - feature/*
+
+stages:
+- stage: Validate
+  displayName: Install and Validate Terraform
+
+  jobs:
+
+  - job: Validate
+    displayName: Terraform Validate
+
+    steps:
+    - task: TerraformInstaller@1
+      displayName: Install Terraform
+      inputs:
+        terraformVersion: 'latest'
+
+    - task: TerraformTask@5
+      displayName: Terraform Init
+      inputs:
+        provider: 'azurerm'
+        command: 'init'
+        backendServiceArm: 'rk-Auto-sc'
+        backendAzureRmResourceGroupName: 'pintra01'
+        backendAzureRmStorageAccountName: 'pintrastore01'
+        backendAzureRmContainerName: 'pintracontainer'
+        backendAzureRmKey: 'state.tfstate'
+
+    - task: TerraformTask@5
+      displayName: Terraform Validate
+      inputs:
+        provider: 'azurerm'
+        command: 'validate'
+
+  - job: Plan
+    displayName: Terraform Plan
+    dependsOn: Validate
+    condition: succeeded()
+
+    steps:
+    - task: TerraformInstaller@1
+      displayName: Install Terraform
+      inputs:
+        terraformVersion: 'latest'
+    - task: TerraformTask@5
+      displayName: Terraform Init
+      inputs:
+        provider: 'azurerm'
+        command: 'init'
+        backendServiceArm: 'rk-Auto-sc'
+        backendAzureRmResourceGroupName: 'pintra01'
+        backendAzureRmStorageAccountName: 'pintrastore01'
+        backendAzureRmContainerName: 'pintracontainer'
+        backendAzureRmKey: 'state.tfstate'
+
+    - task: TerraformTask@5
+      displayName: Terraform Plan
+      inputs:
+        provider: 'azurerm'
+        command: 'plan'
+        environmentServiceNameAzureRM: 'rk-Auto-sc'
+        commandOptions: '-out=tfplan'
