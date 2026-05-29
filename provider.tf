@@ -1,9 +1,9 @@
 terraform {
   backend "azurerm" {
-    resource_group_name = "rk-rg"
-    storage_account_name = "sidharthstga"
-    container_name = "rk-container"
-    key = "rk_state.tf"
+    resource_group_name = "pintra01"
+    storage_account_name = "pintrastore01"
+    container_name = "pintracontainer"
+    key = "state.tfstate"
   }
   required_providers {
     azurerm = {
@@ -13,7 +13,6 @@ terraform {
   }
 }
 provider "azurerm" {
-  subscription_id = "f7c92316-e35c-46d7-8627-eb58c8587ec6"
-  features {
-  }
+  subscription_id = "f7717ad7-a260-499d-ae7f-35015d43eb34"
+  features {}
 }
