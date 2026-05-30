@@ -96,3 +96,4 @@ stages:
         provider: 'azurerm'
         command: 'apply'
         commandOptions: '"tfplan"'
+        environmentServiceNameAzureRM: 'Manual_Sc_with_App_register'
