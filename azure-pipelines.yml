@@ -1,7 +1,7 @@
 trigger:
 - main
 # - feature/*
-
+pool: rk-agent-pool
 stages:
 - stage: Validate
   displayName: Install and Validate Terraform
