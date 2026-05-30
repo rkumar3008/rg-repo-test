@@ -22,7 +22,7 @@ stages:
       inputs:
         provider: 'azurerm'
         command: 'init'
-        backendServiceArm: 'SC_With_Managed_id'
+        backendServiceArm: 'Manual_Sc_with_App_register'
         backendAzureRmResourceGroupName: 'pintra01'
         backendAzureRmStorageAccountName: 'pintrastore01'
         backendAzureRmContainerName: 'pintracontainer'
@@ -49,7 +49,7 @@ stages:
       inputs:
         provider: 'azurerm'
         command: 'init'
-        backendServiceArm: 'SC_With_Managed_id'
+        backendServiceArm: 'Manual_Sc_with_App_register'
         backendAzureRmResourceGroupName: 'pintra01'
         backendAzureRmStorageAccountName: 'pintrastore01'
         backendAzureRmContainerName: 'pintracontainer'
@@ -60,5 +60,5 @@ stages:
       inputs:
         provider: 'azurerm'
         command: 'plan'
-        environmentServiceNameAzureRM: 'rk-Auto-sc'
+        environmentServiceNameAzureRM: 'Manual_Sc_with_App_register'
         commandOptions: '-out=tfplan'
