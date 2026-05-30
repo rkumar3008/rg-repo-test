@@ -65,6 +65,8 @@ stages:
 
   - job: Manual_Validation
     displayName: Manual validation
+    dependsOn: Plan
+    condition: succeeded()
     pool: server
     steps:
     - task: ManualValidation@1
@@ -74,8 +76,12 @@ stages:
 
   - job: Apply
     dependsOn: Manual_Validation
+    condition: succeeded()
     displayName: Apply
     steps:
+    - task: TerraformInstaller@1
+      inputs:
+        terraformVersion: 'latest'
     - task: TerraformTask@5
       inputs:
         provider: 'azurerm'
