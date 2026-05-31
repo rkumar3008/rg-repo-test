@@ -18,7 +18,7 @@ stages:
         version: 'v1.26.0'
     - task: PowerShell@2
       displayName: TFLint
-      continueOnError: true
+      # continueOnError: true
       inputs:
         targetType: 'inline'
         script: |
