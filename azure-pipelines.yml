@@ -1,17 +1,27 @@
 trigger:
 - main
-# - feature/*
+
 pool: rk-agent-pool
 stages:
-- stage: Validate
-  displayName: Install and Validate Terraform
-
+- stage: Scann_validate
+  displayName: Scann_validate
+  
   jobs:
-
-  - job: Validate
+  - job: Scann_validate
     displayName: Terraform Validate
 
     steps:
+    - checkout: self
+    - task: tfsec@1
+      displayName: tfsec
+      inputs:
+        version: 'v1.26.0'
+    - task: PowerShell@2
+      inputs:
+        targetType: 'inline'
+        script: |
+          cd $(Build.SourcesDirectory)
+          tflint
     - task: TerraformInstaller@1
       displayName: Install Terraform
       inputs:
@@ -36,7 +46,7 @@ stages:
 
   - job: Plan
     displayName: Terraform Plan
-    dependsOn: Validate
+    dependsOn: Scann_validate
     condition: succeeded()
 
     steps:
