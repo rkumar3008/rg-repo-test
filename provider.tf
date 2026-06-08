@@ -1,9 +1,9 @@
 terraform {
   required_version = ">=1.0"
   backend "azurerm" {
-    resource_group_name = "pintra01"
-    storage_account_name = "pintrastore01"
-    container_name = "pintracontainer"
+    resource_group_name = "rk-backend"
+    storage_account_name = "rk320stg"
+    container_name = "rk-container"
     key = "state.tfstate"
   }
   required_providers {
