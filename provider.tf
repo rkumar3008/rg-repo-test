@@ -1,5 +1,5 @@
 terraform {
-  required_version >= "1.0"
+  required_version = ">=1.0"
   backend "azurerm" {
     resource_group_name = "pintra01"
     storage_account_name = "pintrastore01"
