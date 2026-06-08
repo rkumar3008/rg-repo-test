@@ -30,5 +30,10 @@ stages:
       inputs:
         provider: 'azurerm'
         command: 'validate'
+    - task: TerraformTask@5
+      inputs:
+        provider: 'azurerm'
+        command: 'plan'
+        environmentServiceNameAzureRM: 'ranveer'
 
 
