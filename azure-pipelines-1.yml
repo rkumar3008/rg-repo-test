@@ -1,0 +1,24 @@
+trigger:
+- main
+- feature/*
+
+stages:
+- stage: 
+  displayName: Validate_Plan
+  pool: rk-agent-pool
+  jobs:
+  - job: 
+    displayName: Validate
+    steps: 
+    - task: TerraformInstaller@1
+      displayName: Terraform_cli_install
+      inputs:
+        terraformVersion: 'latest'
+
+    - task: TerraformTask@5
+      displayName: Validate
+      inputs:
+        provider: 'azurerm'
+        command: 'validate'
+
+
