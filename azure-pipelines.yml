@@ -1,5 +1,6 @@
 trigger:
 - main
+
 pool: Azure Pipelines
 
 stages:
@@ -17,6 +18,7 @@ stages:
       
     - job: tf_install_init_validate_plan
       displayName: job2(tf_install_init)
+      dependsOn: tfsec
       steps:
       - task: TerraformInstaller@1
         displayName: tf_intall
@@ -49,6 +51,7 @@ stages:
       
     - job: Manual_Validation
       displayName: Job3(Manual_Validation)
+      dependsOn: tf_install_init_validate_plan
       pool: Server
       steps:
       - task: ManualValidation@1
@@ -57,6 +60,7 @@ stages:
 
     - job: Apply
       displayName: job4(apply)
+      dependsOn: Manual_Validation
       steps:
       - task: TerraformInstaller@1
         displayName: tf_install
@@ -77,5 +81,5 @@ stages:
         inputs:
           provider: 'azurerm'
           command: 'apply'
-          commandOptions: 'auto-approve'
+          commandOptions: '--auto-approve'
           environmentServiceNameAzureRM: 'ranveer'
