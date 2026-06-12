@@ -1,8 +1,11 @@
 trigger:
 - main
+pool: Azure Pipelines
+
 stages:
   - stage: scan_validation
     displayName: scan_validate
+    pool: rk-agent-pool
     jobs:
     - job: tfsec
       displayName: Job1(scan)
@@ -38,8 +41,41 @@ stages:
           command: 'validate'
 
       - task: TerraformTask@5
+        displayName: plan
         inputs:
           provider: 'azurerm'
           command: 'plan'
           environmentServiceNameAzureRM: 'ranveer'
       
+    - job: Manual_Validation
+      displayName: Job3(Manual_Validation)
+      pool: Server
+      steps:
+      - task: ManualValidation@1
+        inputs:
+          notifyUsers: 'ranjeetkr0696'
+
+    - job: Apply
+      displayName: job4(apply)
+      steps:
+      - task: TerraformInstaller@1
+        displayName: tf_install
+        inputs:
+          terraformVersion: 'latest'
+      - task: TerraformTask@5
+        displayName: init
+        inputs:
+          provider: 'azurerm'
+          command: 'init'
+          backendServiceArm: 'ranveer'
+          backendAzureRmResourceGroupName: 'rk-backend'
+          backendAzureRmStorageAccountName: 'rk320stg'
+          backendAzureRmContainerName: 'rk-container'
+          backendAzureRmKey: 'state.tfstate'
+      - task: TerraformTask@5
+        displayName: apply
+        inputs:
+          provider: 'azurerm'
+          command: 'apply'
+          commandOptions: 'auto-approve'
+          environmentServiceNameAzureRM: 'ranveer'
