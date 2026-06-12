@@ -1,0 +1,45 @@
+trigger:
+- main
+stages:
+  - stage: scan_validation
+    displayName: scan_validate
+    jobs:
+    - job: tfsec
+      displayName: Job1(scan)
+      steps:
+      - task: tfsec@1
+        displayName: tfsec
+        inputs:
+          version: 'v1.26.0'
+      
+    - job: tf_install_init_validate_plan
+      displayName: job2(tf_install_init)
+      steps:
+      - task: TerraformInstaller@1
+        displayName: tf_intall
+        inputs:
+          terraformVersion: 'latest'
+      
+      - task: TerraformTask@5
+        displayName: init
+        inputs:
+          provider: 'azurerm'
+          command: 'init'
+          backendServiceArm: 'ranveer'
+          backendAzureRmResourceGroupName: 'rk-backend'
+          backendAzureRmStorageAccountName: 'rk320stg'
+          backendAzureRmContainerName: 'rk-container'
+          backendAzureRmKey: 'state.tfstate'
+
+      - task: TerraformTask@5
+        displayName: validate
+        inputs:
+          provider: 'azurerm'
+          command: 'validate'
+
+      - task: TerraformTask@5
+        inputs:
+          provider: 'azurerm'
+          command: 'plan'
+          environmentServiceNameAzureRM: 'ranveer'
+      
